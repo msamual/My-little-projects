@@ -3,7 +3,7 @@ CFLAGS=-c -Wall
 LDFLAGS=-Wall
 SOURCES=srcs/main.c
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=basic
+EXECUTABLE=simpletron
 #LIBRARY
 INCLUDES=-I./includes/
 
