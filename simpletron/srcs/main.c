@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 /*** размер памяти ***/
 #define MEMORY 100
 /*** коды операций ***/
@@ -34,6 +35,10 @@ void	scaner(int memory[])
 			printf("0");
 		printf("%d? ", i);
 		scanf("%d", &tmp);
+		while ((tmp > 9999 || tmp < -9999) && tmp != -99999) {
+			printf("Введите число в диапазоне от -9999 до 9999: ");
+			scanf("%d", &tmp);
+		}
 		if (tmp == -99999)
 			break ;
 		memory[i] = tmp;
@@ -60,6 +65,21 @@ void	dump(int memory[])
 	}
 	printf("\n");
 }
+void error(int accumulator, int memory[], int operation_code, int operand)
+{
+	if (memory[operand] == 0 && operation_code == DIV) {
+		printf("*** Попытка деления на ноль ***\n");
+		printf("*** Симплетрон аварийно завершил выполнение программы***\n");
+		dump(memory);
+		exit(1);
+	}
+	if (accumulator < -9999 || accumulator > 9999) {
+		printf("*** Переполнение аккумулятора! ***\n");
+		printf("*** Симплетрон аварийно завершил выполнение программы***\n");
+		dump(memory);
+		exit(1);
+	}
+}
 
 void	interpretator(int memory[])
 {
@@ -73,8 +93,10 @@ void	interpretator(int memory[])
 		inst_register = memory[inst_counter];
 		operation_code = inst_register / 100;
 		operand = inst_register % 100;
-		if (operation_code == READ)
+		if (operation_code == READ) {
+			printf("Введите число: ");
 			scanf("%d", &memory[operand]);
+		}
 		if (operation_code == WRITE)
 			printf("%d\n", memory[operand]);
 		if (operation_code == LOAD)
@@ -85,8 +107,10 @@ void	interpretator(int memory[])
 			accumulator = accumulator + memory[operand];
 		if (operation_code == SUB)
 			accumulator = accumulator - memory[operand];
-		if (operation_code == DIV)
+		if (operation_code == DIV) {
+			error(accumulator, memory, operation_code, operand);
 			accumulator = accumulator / memory[operand];
+		}
 		if (operation_code == MUL)
 			accumulator = accumulator * memory[operand];
 		inst_counter++;
@@ -100,6 +124,7 @@ void	interpretator(int memory[])
 			printf("*** Симплетрон закончил свои вычисления ***\n");
 			break ;
 		}
+		error(accumulator, memory, operation_code, operand);
 	}
 }
 
@@ -110,6 +135,5 @@ int		main(void)
 	instruction();
 	scaner(memory);
 	interpretator(memory);
-	dump(memory);
 	return (0);
 }
