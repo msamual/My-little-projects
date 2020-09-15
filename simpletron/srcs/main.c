@@ -1,6 +1,19 @@
 #include <stdio.h>
-
+/*** размер памяти ***/
 #define MEMORY 100
+/*** коды операций ***/
+#define READ	10
+#define WRITE	11
+#define LOAD	20
+#define STORE	21
+#define ADD		30
+#define SUB		31
+#define DIV		32
+#define MUL		33
+#define BRANCH	40
+#define BRANCHNEG	41
+#define BRANCHZERO	42
+#define HALT		43
 
 void	instruction(void)
 {
@@ -48,12 +61,55 @@ void	dump(int memory[])
 	printf("\n");
 }
 
+void	interpretator(int memory[])
+{
+	int accumulator = 0;
+	int inst_counter = 0;
+	int inst_register = 0;
+	int operation_code = 0;
+	int operand = 0;
+
+	while (inst_counter < MEMORY) {
+		inst_register = memory[inst_counter];
+		operation_code = inst_register / 100;
+		operand = inst_register % 100;
+		if (operation_code == READ)
+			scanf("%d", &memory[operand]);
+		if (operation_code == WRITE)
+			printf("%d\n", memory[operand]);
+		if (operation_code == LOAD)
+			accumulator = memory[operand];
+		if (operation_code == STORE)
+			memory[operand] = accumulator;
+		if (operation_code == ADD)
+			accumulator = accumulator + memory[operand];
+		if (operation_code == SUB)
+			accumulator = accumulator - memory[operand];
+		if (operation_code == DIV)
+			accumulator = accumulator / memory[operand];
+		if (operation_code == MUL)
+			accumulator = accumulator * memory[operand];
+		inst_counter++;
+		if (operation_code == BRANCH)
+			inst_counter = operand;
+		if (operation_code == BRANCHNEG && accumulator < 0)
+			inst_counter = operand;
+		if (operation_code == BRANCHZERO && accumulator == 0)
+			inst_counter = operand;
+		if (operation_code == HALT) {
+			printf("*** Симплетрон закончил свои вычисления ***\n");
+			break ;
+		}
+	}
+}
+
 int		main(void)
 {
 	int memory[100] = {0};
 
 	instruction();
 	scaner(memory);
+	interpretator(memory);
 	dump(memory);
 	return (0);
 }
