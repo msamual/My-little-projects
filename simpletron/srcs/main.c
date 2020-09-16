@@ -29,7 +29,7 @@ void	instruction(void)
 void	scaner(int memory[])
 {
 	int tmp  = 0;
-
+	
 	for (int i = 0; i < MEMORY; i++) {
 		if (i < 10)
 			printf("0");
@@ -43,27 +43,30 @@ void	scaner(int memory[])
 			break ;
 		memory[i] = tmp;
 	}
-	printf("*** Загрузка программы завершена ***\n\
-*** Начинаю выполнение программы ***\n");
+	printf("*** Загрузка программы завершена ***\n");
 }
 
 void	dump(int memory[])
 {
-	printf("ПАМЯТЬ:\n\
+	FILE *file;
+
+	file = fopen("dump.txt", "w");
+	fprintf(file, "ПАМЯТЬ:\n\
 	0	1	2	3	4	5	6	7	8	9");
 	for (int i = 0; i < MEMORY; i++) {
 		if (i % 10 == 0)
-			printf("\n%2d  ", i);
-		printf("+");
+			fprintf(file, "\n%2d  ", i);
+		fprintf(file, "+");
 		if (memory[i] / 1000 == 0)
-			printf("0");
+			fprintf(file, "0");
 		if (memory[i] / 100 == 0)
-			printf("0");
+			fprintf(file, "0");
 		if (memory[i] / 10 == 0)
-			printf("0");
-		printf("%d   ", memory[i]);
+			fprintf(file, "0");
+		fprintf(file, "%d   ", memory[i]);
 	}
-	printf("\n");
+	fprintf(file, "\n");
+	fclose(file);
 }
 void error(int accumulator, int memory[], int operation_code, int operand)
 {
@@ -89,6 +92,7 @@ void	interpretator(int memory[])
 	int operation_code = 0;
 	int operand = 0;
 
+	printf("*** Начинаю выполнение программы ***\n");
 	while (inst_counter < MEMORY) {
 		inst_register = memory[inst_counter];
 		operation_code = inst_register / 100;
@@ -127,13 +131,37 @@ void	interpretator(int memory[])
 		error(accumulator, memory, operation_code, operand);
 	}
 }
+void	load_file(int memory[], char *file)
+{
+	FILE *fptr = 0;
+	int tmp = 0;
 
-int		main(void)
+	if ((fptr = fopen(file, "r")) == 0)
+		printf("Не могу открыть файл\n");
+	else {
+		for (int i = 0; i < MEMORY; i++) {
+			fscanf(fptr, "%d", &tmp);
+			if (tmp < -9999 || tmp > 9999) {
+				printf("Считывание прервано. Некорректные данные: строка %d\n", i);
+				break ;
+			}
+			memory[i] = tmp;
+		}
+	}
+	fclose(fptr);
+}
+	
+int		main(int argc, char **argv)
 {
 	int memory[100] = {0};
-
-	instruction();
-	scaner(memory);
+	
+	if (argc == 1) {
+		instruction();
+		scaner(memory);
+	}
+	else {
+		load_file(memory, argv[1]);
+	}
 	interpretator(memory);
 	return (0);
 }
