@@ -1,10 +1,11 @@
 #include "sudoku.h"
 #include <stdio.h>
+#define VERSION "0.1.1"
 #define M 9
 #define N 10
 #define BACKGROUNDGREEN "\033[42m"
 #define BACKGROUNDYELLOW "\033[1m"
-#define BACKGROUNDGREY "\033[31m"
+#define BACKGROUNDGREY "\033[33m"
 #define DEFAULTATTR "\033[0m"
 
 void    sudoku_print(int x, int y, char array[9][10])
@@ -14,9 +15,11 @@ void    sudoku_print(int x, int y, char array[9][10])
     for (int i = 0; i < M; i++) {
         printf("+---+---+---+---+---+---+---+---+---+");
         if (i == 0)
-            printf("         Sudoku 0.0.1");
+            printf("         Sudoku %s", VERSION);
         if (i == 3)
             printf("          Q - Quit");
+        if (i == 4)
+            printf("          f - Find solution");
         if (i == 6)
             printf("         Press 0 - 9 to set number");
         printf("\n");
@@ -48,4 +51,5 @@ void    sudoku_print(int x, int y, char array[9][10])
         printf("\n");
     }
     printf("%s", "+---+---+---+---+---+---+---+---+---+\n");
+    printf("%s", DEFAULTATTR);
 }

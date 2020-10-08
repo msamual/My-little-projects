@@ -81,6 +81,10 @@ int main()
         check_win(array);
         if (sym == 'r')
             load_file(array);
+        if (sym == 'f') {
+            load_file(array);
+            sudoku(array);
+        }
     }
     /* reset terminal */
     reset_input_mode();
