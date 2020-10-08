@@ -8,4 +8,4 @@ include_directories(.)
 add_executable(sudoku
         main.c
         print.c
-        sudoku.h)
+        sudoku.h logic.c)
