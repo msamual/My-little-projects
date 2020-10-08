@@ -1,5 +1,8 @@
 #include <stdio.h>
+<<<<<<< HEAD
 #include <stdlib.h>
+=======
+>>>>>>> 6e743465a406fbf20ef19da2a7513b8869b8072e
 #include <unistd.h>
 #include <termios.h>
 #include "sudoku.h"
@@ -49,7 +52,10 @@ void    move_cursor(int *x, int *y, char sym)
         *y = 5;
     }
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6e743465a406fbf20ef19da2a7513b8869b8072e
 int main()
 {
     char array[][10] = {
@@ -68,7 +74,10 @@ int main()
     char sym = 0;
 
     load_file(array);
+<<<<<<< HEAD
     system("clear");
+=======
+>>>>>>> 6e743465a406fbf20ef19da2a7513b8869b8072e
     /* set terminal */
     set_input_mode();
     /* Game loop */
@@ -79,8 +88,11 @@ int main()
             set_num(x, y, sym, array);
         move_cursor(&x, &y, sym);
         check_win(array);
+<<<<<<< HEAD
         if (sym == 'r')
             load_file(array);
+=======
+>>>>>>> 6e743465a406fbf20ef19da2a7513b8869b8072e
     }
     /* reset terminal */
     reset_input_mode();
